@@ -41,7 +41,7 @@ public class MasterFragment extends Fragment {
         final List<String> jelaNazivi = JeloProvajder.getJelaNazivi();
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item, jelaNazivi);
-        ListView listView= (ListView)getActivity().findViewById(R.id.listJela);
+        ListView listView= (ListView) getActivity().findViewById(R.id.listJela);
 
         listView.setAdapter(dataAdapter);
 
@@ -54,7 +54,7 @@ public class MasterFragment extends Fragment {
   //------------------------onCreateView----------------------------------------------------------------
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if(container==null){
+        if(container == null){
             return null;
         }
 
