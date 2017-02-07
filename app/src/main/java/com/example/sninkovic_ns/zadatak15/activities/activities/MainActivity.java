@@ -1,53 +1,70 @@
 package com.example.sninkovic_ns.zadatak15.activities.activities;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.net.Uri;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.example.sninkovic_ns.zadatak15.R;
-import com.example.sninkovic_ns.zadatak15.activities.provider.JeloProvajder;
+import com.example.sninkovic_ns.zadatak15.activities.fragments.DetailFragment;
+import com.example.sninkovic_ns.zadatak15.activities.fragments.MasterFragment;
 
-import java.util.List;
+public class MainActivity extends Activity implements MasterFragment.OnItemSelectedListener{
 
-public class MainActivity extends Activity {
+
+    boolean landscape = false;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        final List<String> jelaNazivi = JeloProvajder.getJelaNazivi();
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.list_item, jelaNazivi);
-        ListView listView= (ListView) findViewById(R.id.listJela);
+        if (savedInstanceState == null) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            MasterFragment masterFragment = new MasterFragment();
+            ft.add(R.id.listJela, masterFragment, "Master_Fragment_1");
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
 
-        listView.setAdapter(dataAdapter);
+        }
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                intent.putExtra("position", position);
-                startActivity(intent);
+
+        if (findViewById(R.id.detail_view) != null) {
+            landscape = true;
+            getFragmentManager().popBackStack();
+
+            DetailFragment detailFragment = (DetailFragment) getFragmentManager().findFragmentById(R.id.detail_view);
+            if(detailFragment == null){
+                FragmentTransaction ft=getFragmentManager().beginTransaction();
+                detailFragment=new DetailFragment();
+                ft.replace(R.id.detail_view,detailFragment, "Detail_Fragment_1");
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+
             }
 
-        });
+
+        }
+
 
 
 
     }
-/*
-    public MainActivity() {
-        super();
-    }
-*/
+
+    /*
+        public MainActivity() {
+            super();
+        }
+    */
     @Override
     protected void onStart() {
-        super.onStart();
+        super.onStart();// ATTENTION: This was auto-generated to implement the App Indexing API.
+// See https://g.co/AppIndexing/AndroidStudio for more information.
+
     }
 
     @Override
@@ -60,10 +77,7 @@ public class MainActivity extends Activity {
         super.onResume();
     }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-    }
+
 
     @Override
     protected void onPause() {
@@ -72,11 +86,41 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onStop() {
-        super.onStop();
+        super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
+// See https://g.co/AppIndexing/AndroidStudio for more information.
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+
+    public void onItemSelected(int postion){
+        if(landscape){
+            DetailFragment detailFragment=(DetailFragment) getFragmentManager().findFragmentById( R.id.detail_view );
+            detailFragment.updateContent(postion);
+        }else{
+            DetailFragment detailFragment=new DetailFragment();
+            detailFragment.setContent( postion );
+            FragmentTransaction ft=getFragmentManager().beginTransaction();
+            ft.replace( R.id.listJela, detailFragment , "Detail_fragment_2");
+            ft.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_FADE );
+            ft.addToBackStack( null);
+            ft.commit();
+
+        }
+    }
+
+
+
+
 }
+
+
+
